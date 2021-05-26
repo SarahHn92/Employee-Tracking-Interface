@@ -19,7 +19,7 @@ const begin = () => {
       }
       
     ])
-    .then((answers.) => {
+    .then((answers) => {
       // Use user feedback for... whatever!!
       // switch on answers.start
       switch (answers.start) {
@@ -32,7 +32,17 @@ const begin = () => {
         case 'View all employees':
           employeeView();
 
-        case upda
+        case 'Add Department':
+          addDpt();  
+
+        case 'Add Role':
+          addRole();
+          
+        case 'Add Employee':
+          addEmployee();
+          
+        case 'Update employees':
+          updateEmployee();
       } 
       //case
     })
