@@ -6,6 +6,9 @@ const Employee = require('./models/Employee');
 const Role = require('./models/Role');
 
 var inquirer = require('inquirer');
+const connection = require('./config/connection');
+
+
 
 const begin = () => {
   inquirer
@@ -24,7 +27,7 @@ const begin = () => {
       // switch on answers.start
       switch (answers.start) {
         case 'View all departments':
-          dptView();
+          dptsView();
           break;
 
         case 'View all roles':
@@ -36,7 +39,7 @@ const begin = () => {
           break;
 
         case 'Add Department':
-          addDpt();  
+          addDpts();  
           break;
 
         case 'Add Role':
@@ -54,10 +57,11 @@ const begin = () => {
       //case
     })
     .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
+        console.log('Error!!!')
     });
 };
+
+connection.connect((err) => {
+  begin();
+  if (err) throw err;
+});
