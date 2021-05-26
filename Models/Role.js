@@ -4,9 +4,10 @@ const inquirer = require('inquirer');
 
 const connection = require("../config/connection")
 
-const roleView = () => {
+roleView = () => {
     connection.query('SELECT * FROM role', function (error, results, fields) {
         if (error) throw error;
+        console.table(results);
     });
 } 
 
@@ -32,5 +33,10 @@ const roleInput = [
 ];
 
 async function addRole() {
-    inquirer.prompt()
+    var answers = await inquirer.prompt(roleInput);
+
+    departments.forEach(name => {
+        // return id ????
+    });
+
 }
