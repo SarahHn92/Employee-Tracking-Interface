@@ -25,24 +25,31 @@ const begin = () => {
       switch (answers.start) {
         case 'View all departments':
           dptView();
+          break;
 
         case 'View all roles':
           roleView();
+          break;
 
         case 'View all employees':
           employeeView();
+          break;
 
         case 'Add Department':
           addDpt();  
+          break;
 
         case 'Add Role':
           addRole();
+          break;
           
         case 'Add Employee':
           addEmployee();
+          break;
           
         case 'Update employees':
           updateEmployee();
+          break;
       } 
       //case
     })
