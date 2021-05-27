@@ -4,12 +4,19 @@ const inquirer = require('inquirer');
 
 const connection = require("../config/connection")
 
-roleView = () => {
+const roleView = () => {
     connection.query('SELECT * FROM role', function (error, results, fields) {
         if (error) throw error;
         console.table(results);
     });
 } 
+
+const departments = new Array() => {
+    connection.query('SELECT * FROM department', function (error, results, fields) {
+        if (error) throw error;
+        // var dptdata = Object.entries  NOT COMPLETED YET!
+    }
+}
 
 
 
@@ -35,8 +42,9 @@ const roleInput = [
 async function addRole() {
     var answers = await inquirer.prompt(roleInput);
 
-    departments.forEach(name => {
-        // return id ????
-    });
+
+    // departments.forEach(name => {
+    //     // return id ????
+    // });
 
 }
