@@ -4,13 +4,14 @@ const mysql = require('mysql');
 const table = require('console.table');
 
 // Import model to sync table with database
-const Department = require('./models/Department');
-const Employee = require('./models/Employee');
-const Role = require('./models/Role');
+// const Department = require('./models/Department');
+// const Employee = require('./models/Employee');
+// const Role = require('./models/Role');
 
 
 
 const begin = () => {
+  console.log("hi");
   inquirer
     .prompt([
       /* Pass your questions in here */
@@ -62,6 +63,7 @@ const begin = () => {
 };
 
 connection.connect((err) => {
+  console.log("it works");
   begin();
   if (err) throw err;
 });
