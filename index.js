@@ -1,10 +1,12 @@
+var inquirer = require('inquirer');
+const connection = require('./config/connection');
+const mysql = require('mysql');
+const table = require('console.table');
+
 // Import model to sync table with database
 const Department = require('./models/Department');
 const Employee = require('./models/Employee');
 const Role = require('./models/Role');
-
-var inquirer = require('inquirer');
-const connection = require('./config/connection');
 
 
 

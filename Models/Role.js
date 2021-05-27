@@ -11,12 +11,22 @@ const roleView = () => {
     });
 } 
 
-const departments = new Array() => {
-    connection.query('SELECT * FROM department', function (error, results, fields) {
-        if (error) throw error;
-        // var dptdata = Object.entries  NOT COMPLETED YET!
-    }
-}
+// new Array(departments) => {
+//     connection.query('SELECT * FROM department', function (error, results, fields) {
+//         if (error) throw error;
+//         var dptdata = Object.entries(obj);
+//         var data = dptdata.map((item) => {return item.name});
+        
+// }
+
+const dptdata = connection.query('SELECT * FROM department', function (err, res, fields) {
+    if (error) throw error;
+});
+
+const dptList = dptdata.map(({ id, name }) => ({
+    name: name,
+    value: id
+}));
 
 
 
@@ -35,7 +45,7 @@ const roleInput = [
     name: "dpt",
     type: "list",
     message: "What department does this role belong to?",
-    choices: departments
+    choices: dptList
     }
 ];
 
@@ -48,3 +58,5 @@ async function addRole() {
     // });
 
 }
+
+
