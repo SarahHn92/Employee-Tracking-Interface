@@ -1,5 +1,3 @@
-const mysql = require('./config/connection');
-
 // Import model to sync table with database
 const Department = require('./models/Department');
 const Employee = require('./models/Employee');
@@ -22,40 +20,40 @@ const begin = () => {
       }
       
     ])
-    .then((answers) => {
-      // Use user feedback for... whatever!!
-      // switch on answers.start
-      switch (answers.start) {
-        case 'View all departments':
-          dptsView();
-          break;
+    // .then((answers) => {
+    //   // Use user feedback for... whatever!!
+    //   // switch on answers.start
+    //   switch (answers.start) {
+    //     case 'View all departments':
+    //       dptsView();
+    //       break;
 
-        case 'View all roles':
-          roleView();
-          break;
+    //     case 'View all roles':
+    //       roleView();
+    //       break;
 
-        case 'View all employees':
-          employeeView();
-          break;
+    //     case 'View all employees':
+    //       employeeView();
+    //       break;
 
-        case 'Add Department':
-          addDpts();  
-          break;
+    //     case 'Add Department':
+    //       addDpts();  
+    //       break;
 
-        case 'Add Role':
-          addRole();
-          break;
+    //     case 'Add Role':
+    //       addRole();
+    //       break;
           
-        case 'Add Employee':
-          addEmployee();
-          break;
+    //     case 'Add Employee':
+    //       addEmployee();
+    //       break;
           
-        case 'Update employees':
-          updateEmployee();
-          break;
-      } 
-      //case
-    })
+    //     case 'Update employees':
+    //       updateEmployee();
+    //       break;
+    //   } 
+    //   //case
+    // })
     .catch((error) => {
         console.log('Error!!!')
     });
