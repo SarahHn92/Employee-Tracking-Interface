@@ -57,10 +57,10 @@ const begin = () => {
     //   } 
     //   //case
     // })
-    .catch((error) => {
-        console.log('Error!!!')
-    });
-};
+//     .catch((error) => {
+//         console.log('Error!!!')
+//     });
+// };
 
 connection.connect((err) => {
   console.log("it works");
