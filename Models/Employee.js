@@ -60,3 +60,6 @@ addEmployee
 // }
 
 updateEmployee
+// query: get list of employees
+// using inquirer ask what info needs updating
+// update query

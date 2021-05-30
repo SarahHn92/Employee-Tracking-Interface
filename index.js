@@ -1,7 +1,10 @@
+require('dotenv').config();
 var inquirer = require('inquirer');
 const connection = require('./config/connection');
 const mysql = require('mysql');
 const table = require('console.table');
+
+console.log(process.env)
 
 // Import model to sync table with database
 // const Department = require('./models/Department');
@@ -60,7 +63,7 @@ const begin = () => {
 //     .catch((error) => {
 //         console.log('Error!!!')
 //     });
-// };
+};
 
 connection.connect((err) => {
   console.log("it works");

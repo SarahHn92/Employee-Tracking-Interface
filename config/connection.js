@@ -1,14 +1,14 @@
 const mysql = require('mysql');
-require('dotenv').config;
+
 
 const connection = mysql.createConnection(
     
     {
         host: 'localhost',
         port: 3306,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
-        user: process.env.DB_USER
+        database: 'tracker_db',
+        password: '2640',
+        user: 'root'
     }
 )
 

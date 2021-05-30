@@ -12,19 +12,6 @@ const roleView = () => {
     });
 } 
 
-// new Array(departments) => {
-//     connection.query('SELECT * FROM department', function (error, results, fields) {
-//         if (error) throw error;
-//         var dptdata = Object.entries(obj);
-//         var data = dptdata.map((item) => {return item.name});
-        
-// }
-
-
-
-
-
-
 
 async function addRole() {
     
