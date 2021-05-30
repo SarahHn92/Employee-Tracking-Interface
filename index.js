@@ -4,7 +4,6 @@ const connection = require('./config/connection');
 const mysql = require('mysql');
 const table = require('console.table');
 
-console.log(process.env)
 
 // Import model to sync table with database
 // const Department = require('./models/Department');
@@ -66,7 +65,6 @@ const begin = () => {
 };
 
 connection.connect((err) => {
-  console.log("it works");
   begin();
   if (err) throw err;
 });
