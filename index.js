@@ -11,60 +11,203 @@ const table = require('console.table');
 // const Role = require('./models/Role');
 
 
+// dptsView()
+
+// View Roles
+const roleView = () => {
+  connection.query('SELECT * FROM role', function (error, results, fields) {
+      if (error) throw error;
+      console.table(results);
+  });
+  begin();
+} 
+
+
+// View employees
+const employeeView = () => {
+  connection.query('SELECT * FROM employee', function (error, results, fields) {
+      if (error) throw error;
+      console.table(results);
+  });
+  begin();
+} 
+
+// addDpts()
+
+
+// add employees
+async function addEmployee() {
+  
+  const roles = await connection.query('SELECT * FROM employee');
+  var roleList = roles.map(({ id, title }) => {
+    return {
+      name: title,
+      value: id
+    }
+  });
+
+  const manager = await connection.query('SELECT * FROM employee');
+  var managerList = manager.map(({ first_name, last_name, id }) => {
+    return {
+      name: `${first_name} ${last_name}`,
+      value: id,
+    }
+  });
+
+  const employeeInput = [
+    {
+      name: 'first_name',
+      type: 'input',
+      message: 'What is the first name of the new employee?',
+    },
+    {
+      name: 'last_name',
+      type: 'input',
+      message: 'What is the last name of the new employee?',
+    },
+    {
+      name: "roleID",
+      type: "list",
+      choices: roleList,
+      message: "What is the employee's role?"
+    },
+    {
+      name: "managerID",
+      type: "list",
+      message: "Who is this employees manager?",
+      choices: managerList
+    }
+  ];
+
+  var answers = await inquirer.prompt(employeeInput);
+  console.log(answers);
+      
+  connection.query(
+    'INSERT INTO employee SET ?',
+      {
+        first_name: answer.first_name,
+        last_name: answer.last_name,
+        role_id: answer.roleID,
+        manager_id: answer.managerID
+      }
+  );
+      
+  console.table('success!');
+  begin();
+};   
+  
+
+
+
+
+// Add Roles
+async function addRole() {
+  
+  connection.query('SELECT * FROM department', async function (error, dptdata, fields) {
+      if (error) throw error;
+      const dptList = dptdata.map(({ id, name }) => {
+        return {
+          name: name,
+          value: id
+        }  
+
+      });
+      const roleInput = [
+          {
+          name: "title",
+          type: "input",
+          message: "What is the role title?"
+          },
+          {
+          name: "salary",
+          type: "input",
+          message: "What is the salary for this role?"
+          },
+          {
+          name: "dpt",
+          type: "list",
+          message: "What department does this role belong to?",
+          choices: dptList
+          }
+      ];
+      var answers = await inquirer.prompt(roleInput);
+      console.log(answers);
+      
+      connection.query(
+      'INSERT INTO role SET ?',
+      {
+          departmentID: answer.dpt,
+          title: answer.title,
+          salary: answer.salary || 0
+      });
+  });   
+  console.table('success!');
+  begin();
+}
+
+// updateEmployee()
+
 
 const begin = () => {
   console.log("hi");
   inquirer
-    .prompt([
+    .prompt({
       /* Pass your questions in here */
-      {
-          type: 'list',
-          name : 'start',
-          message: 'What would you like to do?',
-          choices: ['View all departments', 'View all roles', 'View all employees', 'Add Department', 'Add Role', 'Add Employee', 'Update employees']
-      }
-      
-    ])
-    // .then((answers) => {
+      type: 'list',
+      name : 'start',
+      message: 'What would you like to do?',
+      choices: [
+        'View all departments', 
+        'View all roles', 
+        'View all employees', 
+        'Add Department', 
+        'Add Role', 
+        'Add Employee', 
+        'Update employees',
+        'Finished!'
+        ]
+    })
+    .then((answers) => {
     //   // Use user feedback for... whatever!!
     //   // switch on answers.start
-    //   switch (answers.start) {
+      switch (answers.start) {
     //     case 'View all departments':
     //       dptsView();
     //       break;
 
-    //     case 'View all roles':
-    //       roleView();
-    //       break;
+        case 'View all roles':
+          roleView();
+          break;
 
-    //     case 'View all employees':
-    //       employeeView();
-    //       break;
+        case 'View all employees':
+          employeeView();
+          break;
 
     //     case 'Add Department':
     //       addDpts();  
     //       break;
 
-    //     case 'Add Role':
-    //       addRole();
-    //       break;
+        case 'Add Role':
+          addRole();
+          break;
           
-    //     case 'Add Employee':
-    //       addEmployee();
-    //       break;
+        case 'Add Employee':
+          addEmployee();
+          break;
           
     //     case 'Update employees':
     //       updateEmployee();
     //       break;
-    //   } 
-    //   //case
-    // })
-//     .catch((error) => {
-//         console.log('Error!!!')
-//     });
+      } 
+      //case
+    })
+    .catch((error) => {
+        console.log('Error!!!')
+    });
 };
 
 connection.connect((err) => {
   begin();
   if (err) throw err;
 });
+

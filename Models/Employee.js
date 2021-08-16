@@ -8,55 +8,65 @@ const employeeView = () => {
         if (error) throw error;
         console.table(results);
     });
+    begin();
 } 
 
-employeeView()
 
-addEmployee
 
-// async function addRole() {
+async function addEmployee() {
     
-//     connection.query('SELECT * FROM department', async function (error, dptdata, fields) {
-//         if (error) throw error;
-//         const dptList = dptdata.map(({ id, name }) => ({
-//             name: name,
-//             value: id
-//         }));
-//         const roleInput = [
-//             {
-//             name: "title",
-//             type: "input",
-//             message: "What is the role title?"
-//             },
-//             {
-//             name: "salary",
-//             type: "input",
-//             message: "What is the salary for this role?"
-//             },
-//             {
-//             name: "dpt",
-//             type: "list",
-//             message: "What department does this role belong to?",
-//             choices: dptList
-//             }
-//         ];
-//         var answers = await inquirer.prompt(roleInput);
-//         console.log(answers);
+    connection.query('SELECT * FROM employee', async function (error, roledata, fields) {
+        if (error) throw error;
+        const roleList = roledata.map(({ id, title }) => {
+            return {
+                name: title,
+                value: id
+            }
+        });
+        const employeeInput = [
+            {
+                name: 'first_name',
+                type: 'input',
+                message: 'What is the first name of the new employee?',
+            },
+            {
+                name: 'last_name',
+                type: 'input',
+                message: 'What is the last name of the new employee?',
+            },
+            {
+                name: "roleID",
+                type: "list",
+                choices: roleList,
+                message: "What is the employee's role?"
+            },
+            {
+                name: "managerID",
+                type: "list",
+                message: "Who is this employees manager?",
+                choices: managerList
+            }
+        ];
+        var answers = await inquirer.prompt(employeeInput);
+        console.log(answers);
         
-//         connection.query(
-//         'INSERT INTO role SET ?',
-//         // QUESTION: What does the || 0 do?
-//         {
-//             departmentID: answer.dpt,
-//             title: answer.title,
-//             salary: answer.salary || 0
-//         },
-//         (err) => {
-//           if (err) throw err;
-//           console.log('success!');
-//         }
-//       );
-//     });
+        connection.query(
+        'INSERT INTO employee SET ?',
+        {
+            first_name: answer.first_name,
+            last_name: answer.last_name,
+            role_id: answer.roleID,
+            manager_id: answer.managerID
+        });
+    });   
+    console.table('success!');
+    begin();
+}
+
+
+
+// Update employee roles
+
 // }
 
 updateEmployee

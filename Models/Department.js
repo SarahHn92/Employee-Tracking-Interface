@@ -1,14 +1,19 @@
 const table = require('console.table');
 const inquirer = require('inquirer');
+const mysql = require('mysql');
 
 // create functions relating to department
+
+// View Departments
 const dptsView = () => {
-    connection.query('SELECT * FROM department', function (error, results, fields) {
-        if (error) throw error;
-        console.table(results);
+    connection.query('SELECT * FROM department', function (err, res) {
+        if (err) throw err;
+        console.table(res);
     });
 } 
 
+
+// Add department
 addDpts()
 
 // async function addRole() {
