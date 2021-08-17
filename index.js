@@ -4,13 +4,6 @@ const connection = require('./config/connection');
 const mysql = require('mysql');
 const table = require('console.table');
 
-
-// Import model to sync table with database
-// const Department = require('./models/Department');
-// const Employee = require('./models/Employee');
-// const Role = require('./models/Role');
-
-
 // dptsView()
 
 const dptsView = () => {
@@ -69,86 +62,64 @@ async function addDpts() {
 
 
 // add employees
+
 async function addEmployee() {
-
-  var roles = [];
-  var rolesQuery = connection.query('SELECT * FROM role');
-  var roleList = roles.push((rolesQuery) => {
-    return {
-      name: title,
-      value: id
-    }
-  });
-
-  var manager = [];
-  var managerQuery = connection.query('SELECT * FROM employee');
-  var managerList = manager.push((managerQuery) => {
-    return {
-      name: `${first_name} ${last_name}`,
-      value: id,
-    }
-  });
-
-  const employeeInput = [
-    {
-      name: 'firstName',
-      type: 'input',
-      message: 'What is the first name of the new employee?',
-    },
-    {
-      name: 'lastName',
-      type: 'input',
-      message: 'What is the last name of the new employee?',
-    },
-    {
-      name: "roleID",
-      type: "list",
-      choices: roleList,
-      message: "What is the employee's role?"
-    },
-    {
-      name: "managerID",
-      type: "list",
-      message: "Who is this employees manager?",
-      choices: managerList
-    }
-  ];  
-
-  var answers = await inquirer.prompt(employeeInput)
-  .catch(err => {
-    console.log(err);
-  });
-  console.log(answers);
-      
-  connection.query(
-    'INSERT INTO employee SET ?',
+  
+  connection.query('SELECT * FROM role', async function (err, roleData) {
+    if (err) throw err;
+    const roleList = roleData.map(({ id, title }) => {
+      return {
+        name: title,
+        value: id
+      }
+    });
+    const employeeInput = [
       {
-        firstName: answers.first_name,
-        lastName: answers.last_name,
-        role_id: answers.roleID,
-        manager_id: answers.managerID
-      }  
+        name: 'first_name',
+        type: 'input',
+        message: 'What is the first name of the new employee?',
+      },
+      {
+        name: 'last_name',
+        type: 'input',
+        message: 'What is the last name of the new employee?',
+      },
+      {
+        name: "roleID",
+        type: "list",
+        choices: roleList,
+        message: "What is the employee's role?"
+      }
+    ];
+
+  var answers = await inquirer.prompt(employeeInput);
+  console.table(answers);
+        
+  connection.query(
+      'INSERT INTO employee SET ?',
+        {
+          first_name: answers.first_name,
+          last_name: answers.last_name,
+          roleID: answers.roleID
+        }
   );
-  
-  console.table('success!', answers);    
+        
+  console.table('success!');
   begin();
-};   
+  })
+}
+
   
-
-
-
-
 // Add Roles
 async function addRole() {
   
-  connection.query('SELECT * FROM department', async function (error, dptdata, fields) {
+  connection.query('SELECT * FROM department', async function (error, dptdata) {
       if (error) throw error;
       const dptList = dptdata.map(({ id, name }) => {
         return {
           name: name,
           value: id
         }  
-
       });
       const roleInput = [
           {
@@ -174,17 +145,19 @@ async function addRole() {
       connection.query(
       'INSERT INTO role SET ?',
       {
-          departmentID: answer.dpt,
-          title: answer.title,
-          salary: answer.salary || 0
+          departmentID: answers.dpt,
+          title: answers.title,
+          salary: answers.salary || 0
       });
       console.table('success!');
       begin();
   });   
-  
 }
 
-// updateEmployee()
+function finished() {
+  console.table('Goodbye!')
+  connection.end();
+}
 
 
 const begin = () => {
@@ -202,13 +175,12 @@ const begin = () => {
         'Add Department', 
         'Add Role', 
         'Add Employee', 
-        'Update employees',
         'Finished!'
         ]
     })
     .then((answers) => {
-    //   // Use user feedback for... whatever!!
-    //   // switch on answers.start
+      // Use user feedback for... whatever!!
+      // switch on answers.start
       switch (answers.start) {
         case 'View all departments':
           dptsView();
@@ -234,11 +206,11 @@ const begin = () => {
           addEmployee();
           break;
           
-    //     case 'Update employees':
-    //       updateEmployee();
-    //       break;
-      } 
-      //case
+        case 'Finished!':
+          finished();
+          break;
+    } 
+    
     })
     .catch((error) => {
         console.log('Error!!!')

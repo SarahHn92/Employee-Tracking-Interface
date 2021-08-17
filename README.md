@@ -19,7 +19,10 @@
    [ - License](#license)
 
    ## Screenshot
-   ![Project Screenshot](./services/untitled.png)
+   ![Project Screenshot](./Assets/Screenshot.png)
+
+   ## Video
+   [Screencastify video](https://drive.google.com/file/d/1YasfDUslJY9X6bI8ytpyXEWDxDpijSBM/view)
 
  
    ## Description
