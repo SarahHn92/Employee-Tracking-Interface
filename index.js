@@ -13,26 +13,59 @@ const table = require('console.table');
 
 // dptsView()
 
+const dptsView = () => {
+  connection.query('SELECT * FROM department', function (err, res) {
+    if (err) throw err;
+    console.table(res);
+    begin();
+  });
+  
+}
+
 // View Roles
 const roleView = () => {
-  connection.query('SELECT * FROM role', function (error, results, fields) {
-      if (error) throw error;
-      console.table(results);
+  connection.query('SELECT * FROM role', function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      begin();
   });
-  begin();
+  
 } 
 
 
 // View employees
 const employeeView = () => {
-  connection.query('SELECT * FROM employee', function (error, results, fields) {
-      if (error) throw error;
-      console.table(results);
+  connection.query('SELECT * FROM employee', function (err, res) {
+      if (err) throw err;
+      console.table(res);
+      begin();
   });
-  begin();
+  
 } 
 
 // addDpts()
+
+async function addDpts() {
+  const newDptPrompt = [
+    {
+      name: 'newDpt',
+      type: 'input',
+      message: 'Please enter department name:'
+    }
+  ]
+
+  inquirer.prompt(newDptPrompt).then(function (answer) {
+    connection.query('INSERT INTO department SET ?',
+    {
+      name: answer.newDpt
+    });
+    connection.query('SELECT * FROM department', function (err, res){
+      console.table(res);
+      begin();
+    });
+  })
+  
+}
 
 
 // add employees
@@ -89,10 +122,9 @@ async function addEmployee() {
         last_name: answer.last_name,
         role_id: answer.roleID,
         manager_id: answer.managerID
-      }
+      }  
   );
-      
-  console.table('success!');
+  console.table('success!');    
   begin();
 };   
   
@@ -140,16 +172,17 @@ async function addRole() {
           title: answer.title,
           salary: answer.salary || 0
       });
+      console.table('success!');
+      begin();
   });   
-  console.table('success!');
-  begin();
+  
 }
 
 // updateEmployee()
 
 
 const begin = () => {
-  console.log("hi");
+  console.log("Hi there.");
   inquirer
     .prompt({
       /* Pass your questions in here */
@@ -171,9 +204,9 @@ const begin = () => {
     //   // Use user feedback for... whatever!!
     //   // switch on answers.start
       switch (answers.start) {
-    //     case 'View all departments':
-    //       dptsView();
-    //       break;
+        case 'View all departments':
+          dptsView();
+          break;
 
         case 'View all roles':
           roleView();
@@ -183,9 +216,9 @@ const begin = () => {
           employeeView();
           break;
 
-    //     case 'Add Department':
-    //       addDpts();  
-    //       break;
+        case 'Add Department':
+          addDpts();  
+          break;
 
         case 'Add Role':
           addRole();
