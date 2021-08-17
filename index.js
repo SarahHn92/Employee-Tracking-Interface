@@ -70,17 +70,19 @@ async function addDpts() {
 
 // add employees
 async function addEmployee() {
-  
-  const roles = await connection.query('SELECT * FROM employee');
-  var roleList = roles.map(({ id, title }) => {
+
+  var roles = [];
+  var rolesQuery = connection.query('SELECT * FROM role');
+  var roleList = roles.push((rolesQuery) => {
     return {
       name: title,
       value: id
     }
   });
 
-  const manager = await connection.query('SELECT * FROM employee');
-  var managerList = manager.map(({ first_name, last_name, id }) => {
+  var manager = [];
+  var managerQuery = connection.query('SELECT * FROM employee');
+  var managerList = manager.push((managerQuery) => {
     return {
       name: `${first_name} ${last_name}`,
       value: id,
@@ -89,12 +91,12 @@ async function addEmployee() {
 
   const employeeInput = [
     {
-      name: 'first_name',
+      name: 'firstName',
       type: 'input',
       message: 'What is the first name of the new employee?',
     },
     {
-      name: 'last_name',
+      name: 'lastName',
       type: 'input',
       message: 'What is the last name of the new employee?',
     },
@@ -110,21 +112,25 @@ async function addEmployee() {
       message: "Who is this employees manager?",
       choices: managerList
     }
-  ];
+  ];  
 
-  var answers = await inquirer.prompt(employeeInput);
+  var answers = await inquirer.prompt(employeeInput)
+  .catch(err => {
+    console.log(err);
+  });
   console.log(answers);
       
   connection.query(
     'INSERT INTO employee SET ?',
       {
-        first_name: answer.first_name,
-        last_name: answer.last_name,
-        role_id: answer.roleID,
-        manager_id: answer.managerID
+        firstName: answers.first_name,
+        lastName: answers.last_name,
+        role_id: answers.roleID,
+        manager_id: answers.managerID
       }  
   );
-  console.table('success!');    
+  
+  console.table('success!', answers);    
   begin();
 };   
   
